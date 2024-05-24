@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+  <div class="">
+    <credits-component></credit-component>
+  </div>
+  <div class="controls">
+    <label  for=".width-slider">Change width</label>
+    <input type="range" class="width-slider" min="10" max="100">
+    <label  for=".width-slider">Change color</label>
+    <input type="color" class="color-slider" >
+  </div>
+<canvas id="draw" width="800" height="800"></canvas>
+<script src="https://cdn.jsdelivr.net/gh/GrowWidTalha/credit-component-cdn@master/credit-component.js"></script>
+<script>
+  const canvas = document.querySelector("#draw")
+  const widthSlider = document.querySelector(".width-slider")
+  const colorSlider = document.querySelector(".color-slider")
+  
+  
+  const context = canvas.getContext("2d")
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  context.lineJoin = "round"
+  context.lineCap = "round"
+  context.lineWidth = 100;
+
+  let isDrawing = false;
+  let lastX = 0;
+  let lastY = 0;
+  function draw(e){
+    if(!isDrawing) return;
+    // context.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+    context.beginPath();
+    context.moveTo(lastX, lastY)
+    context.lineTo(e.offsetX, e.offsetY)
+    context.stroke()
+
+    lastX = e.offsetX;
+    lastY = e.offsetY;
+  }
+  canvas.addEventListener("mousedown", (e) => {
+    isDrawing = true;
+    lastX = e.offsetX;
+    lastY = e.offsetY;
+  })
+  function handleUpdate(){
+    context.lineWidth = this.value;
+  }
+  function handleColorUpdate(){
+    context.strokeStyle = this.value;
+  }
+  widthSlider.addEventListener("input", handleUpdate)
+  colorSlider.addEventListener("input", handleColorUpdate)
+  canvas.addEventListener("mousemove", draw)
+  canvas.addEventListener("mouseup", () => isDrawing = false)
+  canvas.addEventListener("mouseout", () => isDrawing = false)
+</script>
+
+<style>
+  html, body {
+    margin: 0;
+  }
+  .controls {
+    position: absolute;
+    top: 200px;
+    left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .controls label{
+    font-size: 30px;
+    font-weight: bold;
+
+  }
+</style>
+
+</body>
+</html>
